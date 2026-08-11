@@ -312,6 +312,22 @@ def cuda_device_context(device):
         if prev is not None:
             torch.cuda.set_device(prev)
 
+MPS_MEMORY_LIMIT = None
+
+def mps_memory_limit():
+    # Bytes Metal will actually allocate before it starts failing, i.e. the
+    # driver recommended working set scaled by the PyTorch watermark ratio.
+    # A ratio of 0 means "no limit", which on unified memory means swap.
+    global MPS_MEMORY_LIMIT
+    if MPS_MEMORY_LIMIT is None:
+        try:
+            recommended = torch.mps.recommended_max_memory()
+            ratio = float(os.environ.get("PYTORCH_MPS_HIGH_WATERMARK_RATIO", 1.7))
+            MPS_MEMORY_LIMIT = int(recommended * ratio) if ratio > 0 else psutil.virtual_memory().total
+        except Exception:
+            MPS_MEMORY_LIMIT = psutil.virtual_memory().total
+    return MPS_MEMORY_LIMIT
+
 def get_total_memory(dev=None, torch_total_too=False):
     global directml_enabled
     if dev is None:
@@ -319,6 +335,11 @@ def get_total_memory(dev=None, torch_total_too=False):
 
     if hasattr(dev, 'type') and (dev.type == 'cpu' or dev.type == 'mps'):
         mem_total = psutil.virtual_memory().total
+        if dev.type == 'mps':
+            # Metal refuses allocations above the driver working set limit long
+            # before system RAM is exhausted, and going past it pushes the whole
+            # machine into swap. Treat that limit as the real device size.
+            mem_total = min(mem_total, mps_memory_limit())
         mem_total_torch = mem_total
     else:
         if directml_enabled:
@@ -387,6 +408,10 @@ def is_oom(e):
         return True
     if isinstance(e, ACCELERATOR_ERROR) and (getattr(e, 'error_code', None) == 2 or "out of memory" in str(e).lower()):
         discard_cuda_async_error()
+        return True
+    # MPS raises a plain RuntimeError ("MPS backend out of memory"), which is not
+    # an AcceleratorError, so it has to be matched on the message alone.
+    if isinstance(e, RuntimeError) and "out of memory" in str(e).lower():
         return True
     return False
 
@@ -1735,6 +1760,15 @@ def get_free_memory(dev=None, torch_free_too=False):
 
     if hasattr(dev, 'type') and (dev.type == 'cpu' or dev.type == 'mps'):
         mem_free_total = psutil.virtual_memory().available
+        if dev.type == 'mps':
+            # psutil "available" counts compressed and purgeable pages, so it
+            # over-reports what Metal can still hand out. Bound it by what is
+            # left below the working set limit.
+            try:
+                allocated = torch.mps.current_allocated_memory()
+            except Exception:
+                allocated = 0
+            mem_free_total = min(mem_free_total, max(0, mps_memory_limit() - allocated))
         mem_free_torch = mem_free_total
     else:
         if directml_enabled:
@@ -2076,6 +2110,21 @@ def unload_model_and_clones(model: ModelPatcher, unload_additional_models=True, 
 def debug_memory_summary():
     if is_amd() or is_nvidia():
         return torch.cuda.memory.memory_summary()
+    if cpu_state == CPUState.MPS:
+        mb = 1024 * 1024
+        try:
+            live = torch.mps.current_allocated_memory()
+            driver = torch.mps.driver_allocated_memory()
+            recommended = torch.mps.recommended_max_memory()
+        except Exception as e:
+            return "MPS memory summary unavailable: {}".format(e)
+        vm = psutil.virtual_memory()
+        return (
+            "  torch tensors live : {:8.1f} MB\n"
+            "  metal allocated    : {:8.1f} MB (cache/untracked: {:.1f} MB)\n"
+            "  metal limit        : {:8.1f} MB (recommended working set, before watermark ratio)\n"
+            "  system RAM         : {:8.1f} MB available of {:.1f} MB"
+        ).format(live / mb, driver / mb, (driver - live) / mb, recommended / mb, vm.available / mb, vm.total / mb)
     return ""
 
 class InterruptProcessingException(BaseException):

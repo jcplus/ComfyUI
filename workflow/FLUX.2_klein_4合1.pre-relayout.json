@@ -1,19 +1,19 @@
 {
   "id": "31183215-c482-48f0-b3ac-59c2372040d7",
   "revision": 0,
-  "last_node_id": 380,
+  "last_node_id": 371,
   "last_link_id": 1037,
   "nodes": [
     {
       "id": 170,
       "type": "VAEEncodeForInpaint",
       "pos": [
-        -1000,
-        1540
+        190,
+        1440
       ],
       "size": [
-        420,
-        110
+        320,
+        100
       ],
       "flags": {
         "pinned": true
@@ -46,7 +46,7 @@
           ]
         }
       ],
-      "title": "④-B 遮罩重绘 Inpaint（用图1的遮罩｜默认 Bypass｜优先级最高）",
+      "title": "Enable masking to edit image1",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.10.0",
@@ -59,20 +59,18 @@
       },
       "widgets_values": [
         24
-      ],
-      "color": "#322",
-      "bgcolor": "#533"
+      ]
     },
     {
       "id": 343,
       "type": "715d19d2-0ce4-4ac8-bb03-4c1c4b60c98b",
       "pos": [
-        220,
-        60
+        -1250,
+        990
       ],
       "size": [
-        420,
-        560
+        360,
+        534
       ],
       "flags": {
         "pinned": true
@@ -83,47 +81,40 @@
         {
           "name": "vae",
           "type": "VAE",
-          "link": 974,
-          "localized_name": "VAE"
+          "link": 974
         },
         {
           "name": "model",
           "type": "MODEL",
-          "link": 987,
-          "localized_name": "模型"
+          "link": 987
         },
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 1037,
-          "localized_name": "正向"
+          "link": 1037
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 985,
-          "localized_name": "负向"
+          "link": 985
         },
         {
           "dir": 3,
           "name": "any_01",
           "type": "LATENT",
-          "link": 978,
-          "localized_name": "latent① 遮罩重绘"
+          "link": 978
         },
         {
           "dir": 3,
           "name": "any_02",
           "type": "LATENT",
-          "link": 979,
-          "localized_name": "latent② 图1画布"
+          "link": 979
         },
         {
           "dir": 3,
           "name": "any_03",
           "type": "LATENT",
-          "link": 980,
-          "localized_name": "latent③ 图1原图"
+          "link": 980
         }
       ],
       "outputs": [
@@ -133,8 +124,7 @@
           "links": [
             981,
             991
-          ],
-          "localized_name": "生成结果"
+          ]
         }
       ],
       "properties": {
@@ -170,21 +160,18 @@
         4,
         1,
         1
-      ],
-      "title": "⑤ 采样 + 解码（KSampler → VAEDecode，内含 latent 三选一开关）",
-      "color": "#233",
-      "bgcolor": "#355"
+      ]
     },
     {
       "id": 340,
       "type": "326635d6-b926-4e2a-9b35-c38c15d0bbe0",
       "pos": [
-        -1560,
-        60
+        -1250,
+        1350
       ],
       "size": [
-        420,
-        300
+        360,
+        278
       ],
       "flags": {
         "pinned": true
@@ -195,20 +182,17 @@
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 955,
-          "localized_name": "提示词"
+          "link": 955
         },
         {
           "name": "pixels",
           "type": "IMAGE",
-          "link": 995,
-          "localized_name": "图1原图"
+          "link": 995
         },
         {
           "name": "pixels_1",
           "type": "IMAGE",
-          "link": 957,
-          "localized_name": "图1画布图"
+          "link": 957
         }
       ],
       "outputs": [
@@ -217,8 +201,7 @@
           "type": "CONDITIONING",
           "links": [
             1030
-          ],
-          "localized_name": "提示词(已挂图1参考)"
+          ]
         },
         {
           "name": "VAE",
@@ -228,8 +211,7 @@
             974,
             1031,
             1036
-          ],
-          "localized_name": "VAE"
+          ]
         },
         {
           "name": "CLIP",
@@ -237,32 +219,28 @@
           "links": [
             964,
             983
-          ],
-          "localized_name": "CLIP"
+          ]
         },
         {
           "name": "LATENT",
           "type": "LATENT",
           "links": [
             980
-          ],
-          "localized_name": "图1原图latent(备用)"
+          ]
         },
         {
           "name": "LATENT_1",
           "type": "LATENT",
           "links": [
             979
-          ],
-          "localized_name": "图1画布latent(主)"
+          ]
         },
         {
           "name": "MODEL",
           "type": "MODEL",
           "links": [
             986
-          ],
-          "localized_name": "模型"
+          ]
         }
       ],
       "properties": {
@@ -281,21 +259,18 @@
         "flux2",
         "default",
         "flux2-vae.safetensors"
-      ],
-      "title": "① 载入模型（UNet-GGUF / CLIP / VAE）+ 图1参考编码",
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
+      ]
     },
     {
       "id": 121,
       "type": "SaveImage",
       "pos": [
-        720,
-        60
+        -440,
+        990
       ],
       "size": [
         620,
-        1000
+        1010
       ],
       "flags": {
         "pinned": true
@@ -335,21 +310,18 @@
       },
       "widgets_values": [
         "Flux2-Klein\\klein"
-      ],
-      "title": "⑥ 保存结果（存到 output 目录）",
-      "color": "#232",
-      "bgcolor": "#353"
+      ]
     },
     {
       "id": 339,
       "type": "d051d412-19b1-49e2-90b3-bba94215cfd1",
       "pos": [
-        -1000,
-        1880
+        190,
+        1800
       ],
       "size": [
-        420,
-        210
+        320,
+        200
       ],
       "flags": {
         "pinned": true
@@ -360,20 +332,17 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 964,
-          "localized_name": "CLIP"
+          "link": 964
         },
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 990,
-          "localized_name": "图1"
+          "link": 990
         },
         {
           "name": "conditioning_to",
           "type": "CONDITIONING",
-          "link": 984,
-          "localized_name": "正向提示词"
+          "link": 984
         }
       ],
       "outputs": [
@@ -382,16 +351,14 @@
           "type": "IMAGE",
           "links": [
             957
-          ],
-          "localized_name": "扩图后画布"
+          ]
         },
         {
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
             955
-          ],
-          "localized_name": "提示词(已加扩图指令)"
+          ]
         }
       ],
       "properties": {
@@ -410,28 +377,25 @@
         0,
         0,
         68
-      ],
-      "title": "④-C 扩图 Outpaint（默认 Bypass｜左/上/右/下 + 羽化）",
-      "color": "#322",
-      "bgcolor": "#533"
+      ]
     },
     {
       "id": 251,
       "type": "MarkdownNote",
       "pos": [
-        -2160,
-        1300
+        -1250,
+        1670
       ],
       "size": [
-        480,
-        300
+        360,
+        330
       ],
       "flags": {},
       "order": 0,
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "title": "关于 · 原始工作流出处",
+      "title": "Basic Workflow Series   |   sololo.xyz",
       "properties": {
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -440,21 +404,21 @@
         }
       },
       "widgets_values": [
-        "FLUX2 klein I2I v2.0  |  Workflow by sololo.xyz\n\n原版为英文注释的 4-in-1 工作流，本文件为中文重排版本：\n重新分区、编号、补全注释，逻辑与连线未改动。\n\n原作者说明与示例：\nhttps://sololo.xyz/article?id=18"
+        "FLUX2 klein I2I v2.0  |  Workflow by sololo.xyz\n\nA 4-in-1 workflow combining:\n\n     ·  Single image editing\n\n     ·  Inpainting with mask\n\n     ·  Multi-image reference\n\n     ·  Single image Outpainting\n\n\n\n\n\nFor more details and examples, please visit:\n\nhttps://sololo.xyz/article?id=18"
       ],
-      "color": "#332",
-      "bgcolor": "#593930"
+      "color": "#432",
+      "bgcolor": "#653"
     },
     {
       "id": 348,
       "type": "Power Lora Loader (rgthree)",
       "pos": [
-        -1560,
-        420
+        -1639.1217589154758,
+        987.6621556809059
       ],
       "size": [
-        420,
-        170
+        340.519921875,
+        166
       ],
       "flags": {},
       "order": 15,
@@ -505,28 +469,27 @@
         },
         {},
         ""
-      ],
-      "title": "① LoRA 叠加（rgthree 多 LoRA；默认 Bypass，要用时 Ctrl+B 开启）",
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
+      ]
     },
     {
       "id": 250,
       "type": "Note",
       "pos": [
-        -1000,
-        2120
+        190,
+        1580
       ],
       "size": [
-        420,
-        210
+        320,
+        180
       ],
-      "flags": {},
+      "flags": {
+        "pinned": true
+      },
       "order": 1,
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "title": "④-C 用法",
+      "title": "Note  |  sololo.xyz",
       "properties": {
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -535,7 +498,7 @@
         }
       },
       "widgets_values": [
-        "▲▲▲\n五个数字依次是：左 / 上 / 右 / 下 / 羽化（像素）\n当前 800/0/0/0/68 = 只向左扩 800 像素。\n\n启用后画布变大，子图内会把\n「内容扩展到整个画面、去掉图像四周的空白」\n自动拼到正向提示词后面。\n\n关闭（Bypass）时它只是把图片和提示词原样透传。"
+        "▲▲▲\nMask editing has top priority. When enabled, all other references and image expansion are disabled.\n\n\n--------------------------------------------------------------------------------\n\n\nEnter the extension size for each side, then click Run.\n▼▼▼"
       ],
       "color": "#432",
       "bgcolor": "#653"
@@ -544,12 +507,12 @@
       "id": 232,
       "type": "Image Comparer (rgthree)",
       "pos": [
-        1380,
-        60
+        565.5463504003025,
+        985.5923257342607
       ],
       "size": [
         630,
-        1000
+        1010
       ],
       "flags": {},
       "order": 10,
@@ -605,21 +568,18 @@
             "url": "/api/view?filename=rgthree.compare._temp_tashj_00034_.png&type=temp&subfolder=&rand=0.3272762533453887"
           }
         ]
-      ],
-      "title": "⑥ 对比查看：A = 输入的图1（缩放后）　B = 生成结果",
-      "color": "#232",
-      "bgcolor": "#353"
+      ]
     },
     {
       "id": 360,
       "type": "GetImageSize",
       "pos": [
-        -1290,
-        1900
+        -1079.814506552324,
+        786.6994469839207
       ],
       "size": [
-        150,
-        130
+        140,
+        124
       ],
       "flags": {},
       "order": 7,
@@ -653,21 +613,18 @@
         "ver": "0.26.0",
         "Node name for S&R": "GetImageSize"
       },
-      "widgets_values": [],
-      "title": "【工具】查看图1原始尺寸（未接线，不参与运行）",
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
+      "widgets_values": []
     },
     {
       "id": 357,
       "type": "Note",
       "pos": [
-        -1000,
-        490
+        -396.82148452527156,
+        482.7680936521097
       ],
       "size": [
-        420,
-        620
+        764.1826973636356,
+        425.77917175223286
       ],
       "flags": {},
       "order": 2,
@@ -676,22 +633,21 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "【提示词写法】\n· 直接用「图1」「图2」「图3」指代三张图，例如：\n  把图1人物的衣服换成图2的衣服，保持图1的姿势和背景。\n· 只写想要的变化，不必描述整张画面。\n· 负向提示词不用填（自动置零）。\n· 遮罩重绘时只描述遮罩区域要变成什么。\n· 扩图时不用写扩图指令，子图会自动追加。\n\n──────────── 以下为常用范例 ────────────\n\n转换为3D盲盒风格 (Transform into 3d blindbox toy style)，\n\n转换为水彩画风格 (Transform into water coulour painting style)，\n\n\n修复文物的提示词需要问ai，让ai补充细节描述，例如：\nupscale to 8k and filled the missing details from below:\nExtreme macro photography, fine intaglio carving, delicate etched lines on feathers, eyes, and beak, precise groove directionality.\nMicroscopic tool marks, rotary abrasive wheel grooves, U-shaped and V-shaped carved trenches with varying depth, hand-polished surface texture.\nMacro view of drilled bore-hole interior, bi-conical drill offset step marks, faint concentric spiral striations.\nTranslucent jade material, subsurface scattering, antique mineral patina, layered iron-rust brown stains, sharp boundaries of chalky white calcification.\nWeathered antique finish, greasy luster, handled patina, micro-pitting, mellow glossy surface.\n\n增加文字：\nadd white text in hand written style at the center bottom position, text reads \"generated with Miaomiao Harem Anima12\"\n\n虫佬klein修图提示词：\n保持构图一致性不变，Transform the image to realistic photograph. add realistic details to the corrupted image. restore high frequence details from the corrupted image.\n 高清修复极致保真还原，以原图高精度线稿为唯一结构基准，严格锁定轮廓、形体、比例、透视与构图，结构绝对稳定无扭曲变形偏移；提取原图原生色彩基调、色相、明度、饱和度、光影冷暖及色彩分布，严格遵循原图色调与色彩逻辑不篡改；在线稿结构与色彩基调双重约束下极致高清重绘，还原微米级真实物理纹理、材质纤维、表皮肌理、凹凸质感、细腻光影层次与微细节，8K超高清，极致锐利对焦，像素级细节拉满，写实精致，无模糊噪点涂抹伪质感，仅保真修复不新增元素不二次创作完全忠于原图，\n\n转真人风格提示词：\ntransfer image and redraw the main character as a realistic young lady. Maintain the original pose but render with photographic textures (skin pores, fabric sheen, natural shadows). soft lighting.\n\ntransfer image and redraw the main character as a realistic young lady. Maintain the original pose but render with photographic textures. soft lighting. 网红颜值，淡妆，轻度美颜，\n\n转简约色块风格：\n提取画面主体，转绘成大色块手绘厚涂草稿，只保留主要色块，不要细节，不要勾勒线条，不要细节，不要五官，不要纹理，no outlines, no details, transfer into abstract color blocks\n\n\n\n"
+        "转换为3D盲盒风格 (Transform into 3d blindbox toy style)，\n\n转换为水彩画风格 (Transform into water coulour painting style)，\n\n\n修复文物的提示词需要问ai，让ai补充细节描述，例如：\nupscale to 8k and filled the missing details from below:\nExtreme macro photography, fine intaglio carving, delicate etched lines on feathers, eyes, and beak, precise groove directionality.\nMicroscopic tool marks, rotary abrasive wheel grooves, U-shaped and V-shaped carved trenches with varying depth, hand-polished surface texture.\nMacro view of drilled bore-hole interior, bi-conical drill offset step marks, faint concentric spiral striations.\nTranslucent jade material, subsurface scattering, antique mineral patina, layered iron-rust brown stains, sharp boundaries of chalky white calcification.\nWeathered antique finish, greasy luster, handled patina, micro-pitting, mellow glossy surface.\n\n增加文字：\nadd white text in hand written style at the center bottom position, text reads \"generated with Miaomiao Harem Anima12\"\n\n虫佬klein修图提示词：\n保持构图一致性不变，Transform the image to realistic photograph. add realistic details to the corrupted image. restore high frequence details from the corrupted image.\n 高清修复极致保真还原，以原图高精度线稿为唯一结构基准，严格锁定轮廓、形体、比例、透视与构图，结构绝对稳定无扭曲变形偏移；提取原图原生色彩基调、色相、明度、饱和度、光影冷暖及色彩分布，严格遵循原图色调与色彩逻辑不篡改；在线稿结构与色彩基调双重约束下极致高清重绘，还原微米级真实物理纹理、材质纤维、表皮肌理、凹凸质感、细腻光影层次与微细节，8K超高清，极致锐利对焦，像素级细节拉满，写实精致，无模糊噪点涂抹伪质感，仅保真修复不新增元素不二次创作完全忠于原图，\n\n转真人风格提示词：\ntransfer image and redraw the main character as a realistic young lady. Maintain the original pose but render with photographic textures (skin pores, fabric sheen, natural shadows). soft lighting.\n\ntransfer image and redraw the main character as a realistic young lady. Maintain the original pose but render with photographic textures. soft lighting. 网红颜值，淡妆，轻度美颜，\n\n转简约色块风格：\n提取画面主体，转绘成大色块手绘厚涂草稿，只保留主要色块，不要细节，不要勾勒线条，不要细节，不要五官，不要纹理，no outlines, no details, transfer into abstract color blocks\n\n\n\n"
       ],
       "color": "#432",
-      "bgcolor": "#653",
-      "title": "③ 提示词写法与范例"
+      "bgcolor": "#653"
     },
     {
       "id": 366,
       "type": "ReferenceLatent",
       "pos": [
-        -1000,
-        2440
+        -807.6675258769508,
+        2211.3194562244157
       ],
       "size": [
-        280,
-        50
+        204.134765625,
+        46
       ],
       "flags": {},
       "order": 16,
@@ -728,21 +684,18 @@
           "input_ue_unconnectable": {}
         }
       },
-      "widgets_values": [],
-      "title": "④-D 注入图2参考（ReferenceLatent）",
-      "color": "#223",
-      "bgcolor": "#335"
+      "widgets_values": []
     },
     {
       "id": 367,
       "type": "VAEEncode",
       "pos": [
-        -1000,
-        2360
+        -807.6675258769508,
+        2121.3194562244157
       ],
       "size": [
-        280,
-        50
+        140,
+        46
       ],
       "flags": {},
       "order": 17,
@@ -778,21 +731,18 @@
           "input_ue_unconnectable": {}
         }
       },
-      "widgets_values": [],
-      "title": "④-D 图2 编码为参考 latent",
-      "color": "#223",
-      "bgcolor": "#335"
+      "widgets_values": []
     },
     {
       "id": 369,
       "type": "ReferenceLatent",
       "pos": [
-        -1000,
-        2620
+        -63.57699505235903,
+        2239.034876646833
       ],
       "size": [
-        280,
-        50
+        204.134765625,
+        46
       ],
       "flags": {},
       "order": 18,
@@ -829,21 +779,18 @@
           "input_ue_unconnectable": {}
         }
       },
-      "widgets_values": [],
-      "title": "④-D 注入图3参考（默认 Bypass）",
-      "color": "#223",
-      "bgcolor": "#335"
+      "widgets_values": []
     },
     {
       "id": 370,
       "type": "VAEEncode",
       "pos": [
-        -1000,
-        2540
+        -63.57699505235903,
+        2149.034876646833
       ],
       "size": [
-        280,
-        50
+        140,
+        46
       ],
       "flags": {},
       "order": 19,
@@ -879,21 +826,18 @@
           "input_ue_unconnectable": {}
         }
       },
-      "widgets_values": [],
-      "title": "④-D 图3 编码为参考 latent（默认 Bypass）",
-      "color": "#223",
-      "bgcolor": "#335"
+      "widgets_values": []
     },
     {
       "id": 371,
       "type": "LoadImage",
       "pos": [
-        -1560,
-        2500
+        -423.576995052359,
+        2149.034876646833
       ],
       "size": [
-        420,
-        400
+        350,
+        326
       ],
       "flags": {},
       "order": 3,
@@ -926,21 +870,18 @@
       "widgets_values": [
         "豆包 (45).png",
         "image"
-      ],
-      "title": "【图3 · 参考图B】第二张参考（默认 Bypass，需要时开启）",
-      "color": "#223",
-      "bgcolor": "#335"
+      ]
     },
     {
       "id": 349,
       "type": "ResizeImagesByShorterEdge",
       "pos": [
-        -1560,
-        1810
+        -814.080150447465,
+        813.8162388511403
       ],
       "size": [
-        420,
-        60
+        306.030859375,
+        58
       ],
       "flags": {},
       "order": 6,
@@ -969,21 +910,18 @@
       },
       "widgets_values": [
         840
-      ],
-      "title": "② 图1 缩放（短边 = 840）→ 实际出图尺寸",
-      "color": "#232",
-      "bgcolor": "#353"
+      ]
     },
     {
       "id": 351,
       "type": "LoadImage",
       "pos": [
-        -1560,
-        1140
+        -865.7956452877365,
+        987.6742625139569
       ],
       "size": [
-        420,
-        640
+        394.184348829672,
+        631.3598294502593
       ],
       "flags": {},
       "order": 4,
@@ -1008,7 +946,7 @@
           ]
         }
       ],
-      "title": "【图1 · 底图】要编辑的主图 ← 输出尺寸由它决定 / 遮罩也画在这里",
+      "title": "Image1  ----  This is the target image for editing.",
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.14.1",
@@ -1018,20 +956,18 @@
       "widgets_values": [
         "pasted/image (1717).png",
         "image"
-      ],
-      "color": "#232",
-      "bgcolor": "#353"
+      ]
     },
     {
       "id": 368,
       "type": "LoadImage",
       "pos": [
-        -1560,
-        2070
+        -1167.6675258769503,
+        2121.3194562244157
       ],
       "size": [
-        420,
-        400
+        350,
+        326
       ],
       "flags": {},
       "order": 5,
@@ -1064,21 +1000,18 @@
       "widgets_values": [
         "pasted/image (1719).png",
         "image"
-      ],
-      "title": "【图2 · 参考图A】只做内容参考，不影响尺寸（默认开启）",
-      "color": "#223",
-      "bgcolor": "#335"
+      ]
     },
     {
       "id": 344,
       "type": "f73d3296-1ec4-4a28-8681-b818898c941c",
       "pos": [
-        -1000,
-        60
+        190,
+        990
       ],
       "size": [
-        420,
-        400
+        320,
+        410
       ],
       "flags": {
         "pinned": true
@@ -1089,8 +1022,7 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 983,
-          "localized_name": "CLIP"
+          "link": 983
         }
       ],
       "outputs": [
@@ -1099,16 +1031,14 @@
           "type": "CONDITIONING",
           "links": [
             984
-          ],
-          "localized_name": "正向"
+          ]
         },
         {
           "name": "CONDITIONING_1",
           "type": "CONDITIONING",
           "links": [
             985
-          ],
-          "localized_name": "负向(自动置零)"
+          ]
         }
       ],
       "properties": {
@@ -1122,226 +1052,7 @@
         "previewExposures": []
       },
       "widgets_values": [
-        "把图1人物身上的衣服，换成图2里的这套衣服。\n\n【保持不变】图1人物的脸、发型、身材比例、姿势、手脚位置、镜头角度和背景，全部保持原样。\n【照抄图2】服装的款式、剪裁、颜色、面料质感、图案花纹和配饰，严格按照图2还原。\n【自然贴合】衣服要贴合图1人物的身体走向和姿势，褶皱、投影和明暗跟随图1原有的光照方向，衣服与身体、头发的遮挡关系正确。\n【画面质量】写实照片质感，布料纤维和缝线清晰，边缘干净，不改变人物身份，不增加多余的人和物。"
-      ],
-      "title": "③ 提示词（正向；负向由 ConditioningZeroOut 自动生成）",
-      "color": "#323",
-      "bgcolor": "#535"
-    },
-    {
-      "id": 372,
-      "type": "MarkdownNote",
-      "pos": [
-        -2160,
-        60
-      ],
-      "size": [
-        480,
-        1180
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "★ 先读这里 · 使用说明",
-      "properties": {},
-      "widgets_values": [
-        "# FLUX.2 Klein · 四合一工作流\n\n## 运行顺序（画布从左往右）\n**① 载入模型 → ② 图片输入 → ③ 提示词 → ④ 选模式 → ⑤ 采样 → ⑥ 输出**\n\n---\n\n## 四张图分别是什么\n| 节点 | 角色 | 作用 |\n|---|---|---|\n| **图1** | **底图 / 被编辑图** | 唯一决定输出尺寸的图。所有编辑都发生在它身上 |\n| **图2** | **参考图 A** | 只提供内容参考（服装、风格、物体），不影响尺寸。默认开启 |\n| **图3** | **参考图 B** | 第二张参考图，默认 Bypass，需要时再开 |\n| 遮罩 | 画在**图1**上 | 只有图1的遮罩有用，图2/图3的遮罩不接线 |\n\n> 提示词里用「图1」「图2」称呼它们，模型能对上号。\n\n---\n\n## 四种模式怎么切\n用 **Ctrl+B**（Bypass，紫色=关闭）开关 ④ 区里的节点：\n\n1. **单图编辑**（默认）\n   ④ 区全部保持默认 → 只改图1。\n2. **遮罩重绘 Inpaint**\n   在**图1**上右键→在遮罩编辑器中打开，涂抹区域；\n   然后启用 `④-B 遮罩重绘`。\n   ⚠️ **优先级最高**：一旦启用，参考图和扩图都不再生效。\n3. **多图参考**\n   默认已启用 `图2`；需要第三张时，启用 `图3` 的两个节点\n   （`④-D 图3 编码` + `④-D 注入图3参考`）和 `图3` 加载节点。\n4. **单图扩图 Outpaint**\n   启用 `④-C 扩图`，在它上面填 左/上/右/下 的扩展像素与羽化值，\n   画布随之变大，正向提示词会自动拼上扩图指令。\n\n---\n\n## 常改的几个值\n- **尺寸**：② 区 `图1 缩放` 的短边像素（默认 840）。\n- **提示词**：③ 区。负向提示词由 ConditioningZeroOut 自动生成，不用填。\n- **步数 / 种子**：⑤ 区。Klein 是蒸馏模型，**steps=4、cfg=1、denoise=1**，\n  不要按普通 SDXL 的习惯往上调。\n- **LoRA**：① 区 `Power Lora Loader`，默认 Bypass，要用时开启并选权重。\n"
-      ],
-      "color": "#332",
-      "bgcolor": "#593930"
-    },
-    {
-      "id": 373,
-      "type": "Note",
-      "pos": [
-        -1560,
-        630
-      ],
-      "size": [
-        420,
-        380
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "① 模型区说明",
-      "properties": {},
-      "widgets_values": [
-        "本组只做「加载」，一般设好一次就不用再动。\n\n节点内的 5 个下拉：\n  1 unet  : flux-2-klein-9b GGUF 主模型\n  2 clip  : qwen_3_8b 文本编码器\n  3 type  : flux2（必须）\n  4 device: default\n  5 vae   : flux2-vae\n\n子图内部还额外做了两件事（双击节点可进去看）：\n  · 把 图1(缩放后/扩图后) 编码成 latent → 送给 ⑤ 当画布\n  · 把同一张 latent 作为 ReferenceLatent 挂到正向提示词上\n    —— 这就是「图1 被编辑而不是被重画」的原因\n\n子图里的 4 个 LoraLoaderModelOnly 默认全部 Bypass，\n想固定挂 LoRA 可以进子图开启；临时挂 LoRA 用下面的\nPower Lora Loader 更方便。"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 374,
-      "type": "Note",
-      "pos": [
-        -1560,
-        2930
-      ],
-      "size": [
-        420,
-        330
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "② 图片输入说明",
-      "properties": {},
-      "widgets_values": [
-        "▲ 三张图的分工：\n\n【图1】底图 / 垫图 / 被编辑的图\n    · 画布和输出尺寸完全由它决定\n    · 遮罩重绘的遮罩必须画在图1上\n    · 扩图也是扩它\n\n【图2】参考图 A —— 常开\n    · 只把内容特征喂给模型（衣服、风格、人物、物体）\n    · 尺寸与输出无关，随便多大都行\n\n【图3】参考图 B —— 默认关闭\n    要用时同时开启：本节点 + ④ 区的\n    「图3 编码」和「注入图3参考」两个节点。\n\n▼ 缩放节点决定最终出图大小，短边写多少就是多少；\n   显存吃紧就把 840 调小。"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 375,
-      "type": "Note",
-      "pos": [
-        -1000,
-        1180
-      ],
-      "size": [
-        420,
-        320
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "④ 模式区 · 优先级说明",
-      "properties": {},
-      "widgets_values": [
-        "本区决定「这次运行是四种模式中的哪一种」。\n开关方式：选中节点按 Ctrl+B（紫色 = Bypass = 关闭）。\n\n⑤ 采样区的 Any Switch 取第一个有值的输入，优先级：\n\n  1. 遮罩重绘 latent   ← ④-B 开启时才有  【最高】\n  2. 图1画布 latent    ← 常驻，正常编辑/扩图走这条\n  3. 图1原始 latent    ← 备用，实际不会用到\n\n所以：一旦开启 ④-B 遮罩重绘，\n参考图与扩图都会被忽略。"
-      ],
-      "color": "#322",
-      "bgcolor": "#533"
-    },
-    {
-      "id": 376,
-      "type": "Note",
-      "pos": [
-        -1000,
-        1680
-      ],
-      "size": [
-        420,
-        170
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "④-B 用法",
-      "properties": {},
-      "widgets_values": [
-        "1. 在【图1】节点上右键 →「在遮罩编辑器中打开」，涂抹要重画的区域\n2. 选中本节点 Ctrl+B 启用\n3. 提示词只描述遮罩区域要变成什么\n   grow_mask_by = 24（遮罩外扩像素，边缘过硬就调大）"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 377,
-      "type": "Note",
-      "pos": [
-        -1000,
-        2710
-      ],
-      "size": [
-        420,
-        250
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "④-D 多图参考说明",
-      "properties": {},
-      "widgets_values": [
-        "参考图是「串」在正向提示词上的：\n\n  提示词 →(图1参考, 在①子图内) →(图2参考) →(图3参考) → 采样\n\n· 图2 默认开启。\n· 需要第三张时，把「图3 编码」「注入图3参考」以及\n  ② 区的【图3】加载节点一起 Ctrl+B 开启。\n· 参考图只影响内容，不影响输出尺寸。"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 378,
-      "type": "Note",
-      "pos": [
-        220,
-        660
-      ],
-      "size": [
-        420,
-        380
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "⑤ 采样参数说明",
-      "properties": {},
-      "widgets_values": [
-        "节点上的 6 个参数（自上而下）：\n  sampler_name  euler\n  scheduler     simple\n  seed          随机种子；固定它可复现同一张图\n  steps         4    ← Klein 是蒸馏模型，4 步足够\n  cfg           1    ← 必须保持 1，调高会糊/过曝\n  denoise       1    ← 编辑模式靠 ReferenceLatent 保图，\n                       所以这里保持 1，不要按 img2img 的\n                       习惯降到 0.5\n\n子图内部：\n  Any Switch → KSampler → VAEDecode\n  Any Switch 负责在「遮罩重绘 / 正常画布 / 原图」\n  三个 latent 里挑第一个有值的（见 ④ 区说明）。"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 379,
-      "type": "Note",
-      "pos": [
-        720,
-        1100
-      ],
-      "size": [
-        620,
-        180
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "⑥ 输出说明",
-      "properties": {},
-      "widgets_values": [
-        "左：保存节点。文件名前缀保留英文 Flux2-Klein\\klein（路径用英文更稳，\n    避免个别系统下中文文件名乱码）；文件存放在 ComfyUI 的 output 目录。\n右：对比节点。A = 送进模型的图1（已按短边缩放），B = 生成结果，\n    点上方 A / B 标签可切换叠看差异。\n注意：扩图模式下 A 与 B 尺寸不同，属正常现象。"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 380,
-      "type": "MarkdownNote",
-      "pos": [
-        -540,
-        60
-      ],
-      "size": [
-        460,
-        1040
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "★ 换装提示词模板（复制到左边使用）",
-      "properties": {},
-      "color": "#432",
-      "bgcolor": "#653",
-      "widgets_values": [
-        "# 换装：把图1的人穿上图2的衣服\n\n## 图片怎么放\n- **图1 = 底图**：要换装的人物照片（输出尺寸看它）\n- **图2 = 参考图A**：衣服的来源。平铺款图、模特上身图、电商图都行，衣服越完整清晰越好\n- 图2 里如果有人，模型可能连脸一起学；这时在提示词里加一句\n  「**只取图2的衣服，不要图2的人和背景**」\n\n## 基础模板（已填在左边）\n```\n把图1人物身上的衣服，换成图2里的这套衣服。\n保持图1人物的脸、发型、身材比例、姿势、镜头角度和背景不变。\n服装的款式、剪裁、颜色、面料质感、图案和配饰严格照抄图2。\n衣服贴合图1人物的身体走向，褶皱和明暗跟随图1原有的光照方向。\n写实照片质感，布料纤维清晰，不改变人物身份。\n```\n\n## 按需加的句子\n| 想要的效果 | 加这句 |\n|---|---|\n| 只换上衣 | 只替换上衣，下装和鞋子保持图1原样 |\n| 只换下装 | 只替换下装，上衣保持图1原样 |\n| 变全身照 | 改成全身构图，露出完整的腿和鞋子 |\n| 换成长裙 | 裙长到脚踝，裙摆自然垂坠 |\n| 保留原背景 | 背景与图1完全一致，不要重新生成背景 |\n| 换个姿势 | 人物改为站姿正面，双手自然下垂 |\n| 衣服更贴身 | 衣服合身贴合体型，不要宽松变形 |\n| 排除图2的人 | 只取图2的衣服，忽略图2里的人物和背景 |\n\n## 出问题时怎么救\n- **脸变了** → 加「**严格保持图1的五官和脸型不变**」，或改用「局部换装」（见下）\n- **衣服不像图2** → 把图2换成更清晰、更正面的衣服图；提示词里把款式细节写出来\n  （例：白色泡泡袖衬衫，收腰，珍珠扣，缎面质感）\n- **背景被改** → 加「**背景保持不变**」\n- **多出一个人** → 加「**画面里只有一个人**」\n\n## 局部换装（最稳，不动脸）\n1. 在【图1】上右键 →「在遮罩编辑器中打开」，只涂**衣服区域**\n2. 开启 ④-B 遮罩重绘（Ctrl+B）\n3. 提示词只写衣服：`换成图2里的这套衣服，贴合身体，光影与画面一致`\n⚠️ 注意：遮罩重绘优先级最高，开启后**参考图不生效**，\n所以这条路适合「照着文字描述换装」，要照抄图2请走上面的普通模式。\n"
+        "把图1人物的衣服变成图2人物的衣服。长裙款，变成全身图。"
       ]
     }
   ],
@@ -1595,99 +1306,7 @@
       "CONDITIONING"
     ]
   ],
-  "groups": [
-    {
-      "id": 1,
-      "title": "★ 使用说明（先看这里）",
-      "bounding": [
-        -2200,
-        -20,
-        520,
-        1660
-      ],
-      "color": "#8A8",
-      "font_size": 28,
-      "flags": {}
-    },
-    {
-      "id": 2,
-      "title": "① 载入模型 / LoRA",
-      "bounding": [
-        -1600,
-        -20,
-        500,
-        1060
-      ],
-      "color": "#3f789e",
-      "font_size": 28,
-      "flags": {}
-    },
-    {
-      "id": 3,
-      "title": "② 图片输入（图1=底图 / 图2·图3=参考图）",
-      "bounding": [
-        -1600,
-        1060,
-        500,
-        2250
-      ],
-      "color": "#3f789e",
-      "font_size": 28,
-      "flags": {}
-    },
-    {
-      "id": 4,
-      "title": "③ 提示词",
-      "bounding": [
-        -1040,
-        -20,
-        1020,
-        1160
-      ],
-      "color": "#a1309b",
-      "font_size": 28,
-      "flags": {}
-    },
-    {
-      "id": 5,
-      "title": "④ 模式开关（遮罩重绘 / 扩图 / 多图参考）",
-      "bounding": [
-        -1040,
-        1140,
-        500,
-        1870
-      ],
-      "color": "#b06634",
-      "font_size": 28,
-      "flags": {}
-    },
-    {
-      "id": 6,
-      "title": "⑤ 采样与解码",
-      "bounding": [
-        180,
-        -20,
-        500,
-        1080
-      ],
-      "color": "#88A",
-      "font_size": 28,
-      "flags": {}
-    },
-    {
-      "id": 7,
-      "title": "⑥ 输出",
-      "bounding": [
-        680,
-        -20,
-        1370,
-        1330
-      ],
-      "color": "#3f789e",
-      "font_size": 28,
-      "flags": {}
-    }
-  ],
+  "groups": [],
   "definitions": {
     "subgraphs": [
       {
@@ -1701,7 +1320,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "④-C Outpainting 扩图",
+        "name": "Image 1 Outpainting",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -1728,7 +1347,7 @@
             "linkIds": [
               941
             ],
-            "localized_name": "CLIP",
+            "localized_name": "clip",
             "pos": [
               -116.55854492187495,
               2389
@@ -1741,7 +1360,7 @@
             "linkIds": [
               942
             ],
-            "localized_name": "图1",
+            "localized_name": "image",
             "pos": [
               -116.55854492187495,
               2409
@@ -1754,7 +1373,7 @@
             "linkIds": [
               945
             ],
-            "localized_name": "正向提示词",
+            "localized_name": "conditioning_to",
             "pos": [
               -116.55854492187495,
               2429
@@ -1770,8 +1389,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "左扩(像素)"
+            ]
           },
           {
             "id": "ce376476-0128-4acc-9e77-77f5957e1cf9",
@@ -1783,8 +1401,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "上扩"
+            ]
           },
           {
             "id": "f3ee33b7-8eb1-4d90-97bc-351c5704d81e",
@@ -1796,8 +1413,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "右扩"
+            ]
           },
           {
             "id": "0bafaa3b-d16d-4987-8e51-a97846f18161",
@@ -1809,8 +1425,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "下扩"
+            ]
           },
           {
             "id": "8a30973f-ed24-4a96-b2eb-e60d31961409",
@@ -1822,8 +1437,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "羽化"
+            ]
           }
         ],
         "outputs": [
@@ -1834,7 +1448,7 @@
             "linkIds": [
               946
             ],
-            "localized_name": "扩图后画布",
+            "localized_name": "IMAGE",
             "pos": [
               569.515673828125,
               2399
@@ -1847,7 +1461,7 @@
             "linkIds": [
               948
             ],
-            "localized_name": "提示词(已加扩图指令)",
+            "localized_name": "CONDITIONING",
             "pos": [
               569.515673828125,
               2419
@@ -1889,7 +1503,7 @@
                 ]
               }
             ],
-            "title": "扩图专用提示词（自动追加）",
+            "title": "CLIP Text Encode (Positive Prompt)",
             "properties": {
               "cnr_id": "comfy-core",
               "ver": "0.8.2",
@@ -1908,7 +1522,7 @@
               }
             },
             "widgets_values": [
-              "画面内容自然延伸、铺满整个画布，去掉图像四周的空白区域，衔接处无缝，透视、光影和风格与原图保持一致。"
+              "The content expands to the entire canvas.\nRemove the non-image areas around the image."
             ],
             "color": "#232",
             "bgcolor": "#353"
@@ -2012,8 +1626,7 @@
               0,
               0,
               68
-            ],
-            "title": "画布扩展 左/上/右/下 + 羽化"
+            ]
           },
           {
             "id": 338,
@@ -2063,8 +1676,7 @@
                 "input_ue_unconnectable": {}
               }
             },
-            "widgets_values": [],
-            "title": "把扩图提示词拼到正向提示词后面"
+            "widgets_values": []
           }
         ],
         "groups": [],
@@ -2175,7 +1787,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "① Models 载入模型 + 图1参考编码",
+        "name": "Models",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -2202,7 +1814,7 @@
             "linkIds": [
               954
             ],
-            "localized_name": "提示词",
+            "localized_name": "conditioning",
             "pos": [
               -2156,
               1507
@@ -2215,7 +1827,7 @@
             "linkIds": [
               880
             ],
-            "localized_name": "图1原图",
+            "localized_name": "pixels",
             "pos": [
               -2156,
               1527
@@ -2228,7 +1840,7 @@
             "linkIds": [
               953
             ],
-            "localized_name": "图1画布图",
+            "localized_name": "pixels_1",
             "pos": [
               -2156,
               1547
@@ -2244,8 +1856,7 @@
             "pos": [
               -2156,
               1567
-            ],
-            "localized_name": "主模型 UNet"
+            ]
           },
           {
             "id": "b4328a8f-146a-4efb-8ae0-21a45c1d2ca8",
@@ -2257,8 +1868,7 @@
             "pos": [
               -2156,
               1607
-            ],
-            "localized_name": "文本编码器 CLIP"
+            ]
           },
           {
             "id": "440a2db2-5553-4b5a-9b6a-9eff733556ac",
@@ -2270,8 +1880,7 @@
             "pos": [
               -2156,
               1627
-            ],
-            "localized_name": "编码器类型"
+            ]
           },
           {
             "id": "43233fa2-13ae-407c-b6a5-64a6e0a4b1c8",
@@ -2283,8 +1892,7 @@
             "pos": [
               -2156,
               1647
-            ],
-            "localized_name": "运行设备"
+            ]
           },
           {
             "id": "4cbfd2c3-d0a2-4442-b1a8-8536a8eb37f1",
@@ -2296,8 +1904,7 @@
             "pos": [
               -2156,
               1667
-            ],
-            "localized_name": "VAE 模型"
+            ]
           }
         ],
         "outputs": [
@@ -2308,7 +1915,7 @@
             "linkIds": [
               949
             ],
-            "localized_name": "提示词(已挂图1参考)",
+            "localized_name": "CONDITIONING",
             "pos": [
               -1621.865234375,
               1477
@@ -2351,7 +1958,7 @@
             "linkIds": [
               915
             ],
-            "localized_name": "图1原图latent(备用)",
+            "localized_name": "LATENT",
             "pos": [
               -1621.865234375,
               1537
@@ -2364,7 +1971,7 @@
             "linkIds": [
               914
             ],
-            "localized_name": "图1画布latent(主)",
+            "localized_name": "LATENT_1",
             "pos": [
               -1621.865234375,
               1557
@@ -2377,7 +1984,7 @@
             "linkIds": [
               1001
             ],
-            "localized_name": "模型",
+            "localized_name": "MODEL",
             "pos": [
               -1621.865234375,
               1577
@@ -2436,8 +2043,7 @@
                 "input_ue_unconnectable": {}
               }
             },
-            "widgets_values": [],
-            "title": "把 图1 画布 latent 挂到提示词上 ← 编辑模式的关键"
+            "widgets_values": []
           },
           {
             "id": 320,
@@ -2488,8 +2094,7 @@
                 "input_ue_unconnectable": {}
               }
             },
-            "widgets_values": [],
-            "title": "编码 图1 原图 → latent（备用画布）"
+            "widgets_values": []
           },
           {
             "id": 321,
@@ -2538,8 +2143,7 @@
                 "input_ue_unconnectable": {}
               }
             },
-            "widgets_values": [],
-            "title": "（未使用 · 输出没有接线）"
+            "widgets_values": []
           },
           {
             "id": 322,
@@ -2590,8 +2194,7 @@
                 "input_ue_unconnectable": {}
               }
             },
-            "widgets_values": [],
-            "title": "编码 图1 画布图（缩放/扩图后）→ latent（主画布）"
+            "widgets_values": []
           },
           {
             "id": 350,
@@ -2633,8 +2236,7 @@
             "widgets_values": [
               "Klein\\klein_test01_5.safetensors",
               0.6
-            ],
-            "title": "LoRA 1（默认 Bypass）"
+            ]
           },
           {
             "id": 319,
@@ -2689,8 +2291,7 @@
             },
             "widgets_values": [
               "flux-2-klein-9b-Q4_K_M.gguf"
-            ],
-            "title": "主模型 UNet (GGUF)"
+            ]
           },
           {
             "id": 318,
@@ -2774,8 +2375,7 @@
               "qwen_3_8b_fp8mixed.safetensors",
               "flux2",
               "default"
-            ],
-            "title": "文本编码器 CLIP"
+            ]
           },
           {
             "id": 352,
@@ -2817,8 +2417,7 @@
             "widgets_values": [
               "Klein\\jcplus_coser-klein-9b_10.safetensors",
               0.45
-            ],
-            "title": "LoRA 2（默认 Bypass）"
+            ]
           },
           {
             "id": 317,
@@ -2883,8 +2482,7 @@
             },
             "widgets_values": [
               "flux2-vae.safetensors"
-            ],
-            "title": "VAE"
+            ]
           },
           {
             "id": 358,
@@ -2926,8 +2524,7 @@
             "widgets_values": [
               "Klein\\Klein9b_Sandy_lora_e10.safetensors",
               0.6
-            ],
-            "title": "LoRA 3（默认 Bypass）"
+            ]
           },
           {
             "id": 353,
@@ -2969,8 +2566,7 @@
             "widgets_values": [
               "Klein\\f2k_9B_lcs_consist_20260415.safetensors",
               0.6
-            ],
-            "title": "LoRA 4（默认 Bypass）"
+            ]
           }
         ],
         "groups": [],
@@ -3177,7 +2773,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "⑤ Options 采样与解码",
+        "name": "Options",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -3204,7 +2800,7 @@
             "linkIds": [
               960
             ],
-            "localized_name": "VAE",
+            "localized_name": "vae",
             "pos": [
               -1866,
               950
@@ -3217,7 +2813,7 @@
             "linkIds": [
               967
             ],
-            "localized_name": "模型",
+            "localized_name": "model",
             "pos": [
               -1866,
               970
@@ -3230,7 +2826,7 @@
             "linkIds": [
               973
             ],
-            "localized_name": "正向",
+            "localized_name": "positive",
             "pos": [
               -1866,
               990
@@ -3243,7 +2839,7 @@
             "linkIds": [
               930
             ],
-            "localized_name": "负向",
+            "localized_name": "negative",
             "pos": [
               -1866,
               1010
@@ -3260,8 +2856,7 @@
             "pos": [
               -1866,
               1030
-            ],
-            "localized_name": "latent① 遮罩重绘"
+            ]
           },
           {
             "id": "57630a14-e32b-4748-87c5-438556309a9c",
@@ -3274,8 +2869,7 @@
             "pos": [
               -1866,
               1050
-            ],
-            "localized_name": "latent② 图1画布"
+            ]
           },
           {
             "id": "996cdf63-8e7c-414e-abea-a78d25c028c9",
@@ -3288,8 +2882,7 @@
             "pos": [
               -1866,
               1070
-            ],
-            "localized_name": "latent③ 图1原图"
+            ]
           },
           {
             "id": "0b54f5a6-0474-42f3-b1f6-59a0431605c9",
@@ -3301,8 +2894,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "采样器"
+            ]
           },
           {
             "id": "a7620df8-4bbc-412c-89ca-e14c044fdc25",
@@ -3314,8 +2906,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "调度器"
+            ]
           },
           {
             "id": "5c113d2f-9834-400f-851d-5d252ff9fc30",
@@ -3327,8 +2918,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "种子"
+            ]
           },
           {
             "id": "54dd5386-9d07-4a32-af49-275cf82a9243",
@@ -3340,8 +2930,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "步数"
+            ]
           },
           {
             "id": "d138ef28-4d94-4deb-b91f-28cd7cc137b3",
@@ -3353,8 +2942,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "CFG"
+            ]
           },
           {
             "id": "4aed307e-5ebd-46f4-9a0d-25549e0a3ee3",
@@ -3366,8 +2954,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "重绘幅度"
+            ]
           }
         ],
         "outputs": [
@@ -3379,7 +2966,7 @@
               916,
               916
             ],
-            "localized_name": "生成结果",
+            "localized_name": "IMAGE",
             "pos": [
               -916,
               1010
@@ -3444,8 +3031,7 @@
                 "input_ue_unconnectable": {}
               }
             },
-            "widgets_values": [],
-            "title": "解码 VAEDecode → 图像"
+            "widgets_values": []
           },
           {
             "id": 324,
@@ -3569,8 +3155,7 @@
               "euler",
               "simple",
               1
-            ],
-            "title": "采样 KSampler（steps4 / cfg1 / denoise1）"
+            ]
           },
           {
             "id": 325,
@@ -3655,8 +3240,7 @@
                 "input_ue_unconnectable": {}
               }
             },
-            "widgets_values": [],
-            "title": "latent 三选一：遮罩重绘 > 图1画布 > 图1原图"
+            "widgets_values": []
           }
         ],
         "groups": [],
@@ -3807,7 +3391,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "③ Prompt 提示词",
+        "name": "Prompt",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -3834,7 +3418,7 @@
             "linkIds": [
               963
             ],
-            "localized_name": "CLIP",
+            "localized_name": "clip",
             "pos": [
               54,
               1909
@@ -3850,8 +3434,7 @@
             "pos": [
               0,
               0
-            ],
-            "localized_name": "正向提示词"
+            ]
           }
         ],
         "outputs": [
@@ -3862,7 +3445,7 @@
             "linkIds": [
               952
             ],
-            "localized_name": "正向",
+            "localized_name": "CONDITIONING",
             "pos": [
               888.134765625,
               1899
@@ -3875,7 +3458,7 @@
             "linkIds": [
               977
             ],
-            "localized_name": "负向(自动置零)",
+            "localized_name": "CONDITIONING_1",
             "pos": [
               888.134765625,
               1919
@@ -3927,7 +3510,7 @@
                 ]
               }
             ],
-            "title": "正向提示词",
+            "title": "CLIP Text Encode (Positive Prompt)",
             "properties": {
               "cnr_id": "comfy-core",
               "ver": "0.8.2",
@@ -3946,7 +3529,7 @@
               }
             },
             "widgets_values": [
-              "把图1人物身上的衣服，换成图2里的这套衣服。\n\n【保持不变】图1人物的脸、发型、身材比例、姿势、手脚位置、镜头角度和背景，全部保持原样。\n【照抄图2】服装的款式、剪裁、颜色、面料质感、图案花纹和配饰，严格按照图2还原。\n【自然贴合】衣服要贴合图1人物的身体走向和姿势，褶皱、投影和明暗跟随图1原有的光照方向，衣服与身体、头发的遮挡关系正确。\n【画面质量】写实照片质感，布料纤维和缝线清晰，边缘干净，不改变人物身份，不增加多余的人和物。"
+              "transfer image and redraw the main character as a realistic young lady. Maintain the original pose but render with photographic textures. soft lighting. 网红颜值，淡妆，轻度美颜，"
             ],
             "color": "#232",
             "bgcolor": "#353"
@@ -3993,8 +3576,7 @@
                 "input_ue_unconnectable": {}
               }
             },
-            "widgets_values": [],
-            "title": "负向提示词（自动置零，无需填写）"
+            "widgets_values": []
           }
         ],
         "groups": [],
@@ -4060,10 +3642,10 @@
     "ue_links": [],
     "links_added_by_ue": [],
     "ds": {
-      "scale": 0.45,
+      "scale": 0.6588450000002343,
       "offset": [
-        2400,
-        200
+        1383.9884489741148,
+        -817.6915116370758
       ]
     }
   },

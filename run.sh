@@ -20,20 +20,31 @@ PY=".venv/bin/python"
 # --- Apple Silicon environment ---------------------------------------------
 # Unimplemented MPS operators run on the CPU instead of raising an error.
 export PYTORCH_ENABLE_MPS_FALLBACK=1
-# Keep CPU work on the performance cores. Efficiency cores slow down the
-# tokenizer / VAE / data loading paths when they join the thread pool.
-export OMP_NUM_THREADS="$(sysctl -n hw.perflevel0.logicalcpu 2>/dev/null || echo 4)"
+# CPU threads. All performance cores is the fastest setting, but it leaves the
+# desktop fighting ComfyUI for the same cores, which is what makes the UI stutter
+# during the CPU VAE pass and during tokenization. Leaving two P cores free costs
+# a little throughput and keeps the machine usable. Override with COMFY_THREADS.
+PERF_CORES="$(sysctl -n hw.perflevel0.logicalcpu 2>/dev/null || echo 4)"
+export OMP_NUM_THREADS="${COMFY_THREADS:-$(( PERF_CORES > 2 ? PERF_CORES - 2 : PERF_CORES ))}"
 export MKL_NUM_THREADS="$OMP_NUM_THREADS"
+export VECLIB_MAXIMUM_THREADS="$OMP_NUM_THREADS"
 # HuggingFace tokenizers fork warning.
 export TOKENIZERS_PARALLELISM=false
 # Metal reports a recommended working set of ~11.8 GB on this 16 GB machine.
 # PyTorch defaults to 1.7x that (~20 GB), which is more than the machine has:
 # the allocator keeps saying yes until macOS swaps and the whole desktop stalls.
-# Ratio 1.0 keeps every allocation inside physical memory, so a too-large model
-# fails with a clean OOM instead of freezing the Mac.
-export PYTORCH_MPS_HIGH_WATERMARK_RATIO=1.0
-export PYTORCH_MPS_LOW_WATERMARK_RATIO=0.8
-# Never set the ratio to 0.0 - that disables the ceiling and brings the stall back.
+#
+# Ratio 1.0 fits inside physical memory but leaves only ~4 GB for macOS, the
+# browser and everything else, so the machine still swaps and still stutters.
+# 0.8 (~9.5 GB) leaves a real headroom for the rest of the system. This is the
+# knob to raise if a model no longer fits, and to lower if the desktop still
+# stutters - one step at a time. Override with COMFY_MPS_RATIO.
+export PYTORCH_MPS_HIGH_WATERMARK_RATIO="${COMFY_MPS_RATIO:-0.8}"
+# Start returning cached blocks well before the ceiling, so the allocator frees
+# memory gradually instead of in one long stall at the limit.
+export PYTORCH_MPS_LOW_WATERMARK_RATIO=0.6
+# Never set the high ratio to 0.0 - that disables the ceiling and brings the
+# desktop-freezing swap storm back.
 
 # --- Common flags -----------------------------------------------------------
 # --use-pytorch-cross-attention: SDPA on MPS. Without it ComfyUI falls back to
@@ -68,5 +79,19 @@ case "$PROFILE" in
         ;;
 esac
 
-echo "ComfyUI profile: $PROFILE | threads: $OMP_NUM_THREADS"
-exec "$PY" main.py "${ARGS[@]}" "$@"
+# --- Scheduling -------------------------------------------------------------
+# ComfyUI is a batch job; the desktop is interactive. Tell the scheduler that.
+#   nice -n 5          : the window server and foreground apps win the CPU when
+#                        both want it. Metal work is scheduled by the GPU driver
+#                        and is not affected, so generation speed barely moves.
+#   taskpolicy -d utility : disk I/O below interactive apps. Loading a 9 GB model
+#                        no longer freezes anything else that touches the SSD.
+# Not using taskpolicy -b: that clamps the process to the efficiency cores and
+# makes generation several times slower.
+LAUNCH=(nice -n "${COMFY_NICE:-5}")
+if command -v taskpolicy >/dev/null 2>&1; then
+    LAUNCH=(taskpolicy -d utility "${LAUNCH[@]}")
+fi
+
+echo "ComfyUI profile: $PROFILE | threads: $OMP_NUM_THREADS | MPS ratio: $PYTORCH_MPS_HIGH_WATERMARK_RATIO"
+exec "${LAUNCH[@]}" "$PY" main.py "${ARGS[@]}" "$@"

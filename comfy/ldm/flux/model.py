@@ -2,6 +2,8 @@
 
 from dataclasses import dataclass
 
+import logging
+
 import torch
 from torch import Tensor, nn
 from einops import rearrange, repeat
@@ -58,6 +60,20 @@ def invert_slices(slices, length):
         result.append((current, length))
 
     return result
+
+
+_LOGGED_SEQUENCE = None
+
+
+def _log_sequence(img_tokens, ref_tokens, txt_tokens):
+    # Attention cost is set by this number, and reference images push it up
+    # without changing the output size, which is easy to miss in a workflow.
+    # Log it once per distinct shape instead of once per denoising step.
+    global _LOGGED_SEQUENCE
+    seq = (img_tokens, ref_tokens, txt_tokens)
+    if seq != _LOGGED_SEQUENCE:
+        _LOGGED_SEQUENCE = seq
+        logging.info("sequence: {} tokens = {} image + {} reference + {} text".format(sum(seq), img_tokens, ref_tokens, txt_tokens))
 
 
 class Flux(nn.Module):
@@ -402,6 +418,8 @@ class Flux(nn.Module):
         if len(self.params.txt_ids_dims) > 0:
             for i in self.params.txt_ids_dims:
                 txt_ids[:, :, i] = torch.linspace(0, context.shape[1] - 1, steps=context.shape[1], device=x.device, dtype=torch.float32)
+
+        _log_sequence(img_tokens, img_ids.shape[1] - img_tokens, context.shape[1])
 
         out = self.forward_orig(img, img_ids, context, txt_ids, timestep, y, guidance, control, timestep_zero_index=timestep_zero_index, transformer_options=transformer_options, attn_mask=kwargs.get("attention_mask", None))
         out = out[:, :img_tokens]

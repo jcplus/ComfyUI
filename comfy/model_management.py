@@ -593,7 +593,16 @@ if cpu_state != CPUState.GPU:
     vram_state = VRAMState.DISABLED
 
 if cpu_state == CPUState.MPS:
-    vram_state = VRAMState.SHARED
+    # Unified memory, so "VRAM is RAM" and SHARED (never offload, always full
+    # load) is the right default. It stops being right when Metal's recommended
+    # working set is well below system RAM: on a 16GB Mac the ceiling is ~9.5GB,
+    # and a model that fits it leaves nothing for activations. Let an explicit
+    # --lowvram/--novram override the default so partial loading is reachable;
+    # without the flags nothing changes.
+    if set_vram_to in (VRAMState.LOW_VRAM, VRAMState.NO_VRAM):
+        vram_state = set_vram_to
+    else:
+        vram_state = VRAMState.SHARED
 
 logging.info(f"Set vram state to: {vram_state.name}")
 

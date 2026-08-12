@@ -44,9 +44,35 @@ def _apply_rope(xq: Tensor, xk: Tensor, freqs_cis: Tensor):
     return apply_rope1(xq, freqs_cis), apply_rope1(xk, freqs_cis)
 
 
+ROPE_HEAD_CHUNK = 8
+
+
+def _apply_rope1_chunked(x: Tensor, freqs_cis: Tensor, chunk: int = ROPE_HEAD_CHUNK):
+    # Same math as _apply_rope1, done a few heads at a time. The full version
+    # materializes a float32 copy of x (four times its bf16 size) before casting
+    # back, which on a long edit sequence is hundreds of MB per call and per
+    # tensor. freqs_cis broadcasts over the head axis, so slicing it is free.
+    if x.ndim != 4 or x.shape[1] <= chunk:
+        return _apply_rope1(x, freqs_cis)
+
+    out = torch.empty_like(x)
+    for i in range(0, x.shape[1], chunk):
+        out[:, i:i + chunk] = _apply_rope1(x[:, i:i + chunk], freqs_cis)
+    return out
+
+
+def _use_chunked_rope(x) -> bool:
+    # Only on MPS: unified memory has a hard Metal working-set ceiling and no
+    # spill, so the transient beats the small cost of the loop. CUDA keeps the
+    # fused comfy-kitchen kernel.
+    return comfy.model_management.is_device_mps(x.device)
+
+
 def apply_rope(xq, xk, freqs_cis):
     if comfy.model_management.in_training:
         return _apply_rope(xq, xk, freqs_cis)
+    elif _use_chunked_rope(xq):
+        return _apply_rope1_chunked(xq, freqs_cis), _apply_rope1_chunked(xk, freqs_cis)
     else:
         return comfy.quant_ops.ck.apply_rope(xq, xk, freqs_cis)
 
@@ -54,5 +80,7 @@ def apply_rope(xq, xk, freqs_cis):
 def apply_rope1(x, freqs_cis):
     if comfy.model_management.in_training:
         return _apply_rope1(x, freqs_cis)
+    elif _use_chunked_rope(x):
+        return _apply_rope1_chunked(x, freqs_cis)
     else:
         return comfy.quant_ops.ck.apply_rope1(x, freqs_cis)

@@ -71,7 +71,35 @@ case "$PROFILE" in
         #   needs several GB of Metal scratch at full resolution. On a 16 GB Mac
         #   that scratch is what tips the machine into swap. Running it on the CPU
         #   costs a few seconds and takes the whole VAE stage off the Metal budget.
-        ARGS+=(--reserve-vram 1.5 --cache-none --disable-smart-memory --cpu-vae)
+        # --lowvram: on MPS ComfyUI otherwise pins vram_state to SHARED and always
+        #   full-loads the model ("full load: True"), because unified memory is
+        #   supposed to mean VRAM == RAM. It doesn't here: Metal's working set is
+        #   ~11.8 GB (9.5 GB after the watermark ratio) while the machine has 16 GB,
+        #   so a 5.8 GB model fits but leaves too little for activations and the
+        #   sampler OOMs on the first step. With this flag the model loads
+        #   partially - weights sit in RAM and stream in per block.
+        # --reserve-vram: with --lowvram this is the knob that splits the Metal
+        #   budget between weights and activations. ComfyUI keeps
+        #   min(free*0.4, free - 0.8GB - reserve) worth of weights resident and
+        #   streams the rest from RAM every step, so every GB reserved here is a
+        #   GB of weights that gets copied 4 times per image. Lower it until the
+        #   sampler OOMs, then go back one step. Override with COMFY_RESERVE_VRAM.
+        ARGS+=(--lowvram --reserve-vram "${COMFY_RESERVE_VRAM:-3.0}" --disable-smart-memory)
+        # The VAE runs on Metal. It used to run on the CPU here because its
+        # attention block wants GBs of scratch, but measured on this machine
+        # (10,080 token edit, 4 steps) the CPU VAE cost 225s of non-sampling
+        # time against 49s on Metal - 640s total versus 519s. Set
+        # COMFY_CPU_VAE=1 to go back if the VAE stage OOMs, or if bf16 decode
+        # shows artifacts the fp32 CPU path did not have.
+        if [ "${COMFY_CPU_VAE:-0}" = "1" ]; then ARGS+=(--cpu-vae); fi
+        # Caching was measured too and lost: --cache-lru 2 holds RAM the sampler
+        # needs (usable weights fell to 570MB) and came out slowest, 688s total.
+        # COMFY_CACHE=lru/ram is kept only as an escape hatch.
+        case "${COMFY_CACHE:-none}" in
+            lru)  ARGS+=(--cache-lru 2) ;;
+            ram)  ARGS+=(--cache-ram 2) ;;
+            *)    ARGS+=(--cache-none) ;;
+        esac
         ;;
     fast)
         # Small models only. Keeps results cached, so re-runs skip node execution.

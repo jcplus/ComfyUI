@@ -359,3 +359,7 @@
 - In reviews, prioritize real user impact: crashes, wrong dtype/device behavior,
   memory regressions, broken model loading, workflow incompatibility, and noisy
   or misleading user-facing output.
+
+## 测试次数限制
+
+- AI 为验证同一项变更主动执行测试时，测试总次数最多为 100 次。不得无必要重复运行测试，也不得执行 10,000 次级别的循环测试。

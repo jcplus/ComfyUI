@@ -303,6 +303,25 @@ def xformers_attention(q, k, v):
         out = slice_attention(q.view(B, -1, C), k.view(B, -1, C).transpose(1, 2), v.view(B, -1, C).transpose(1, 2)).reshape(orig_shape)
     return out
 
+# MPS materializes the full attention matrix inside SDPA and aborts the process
+# (Metal assertion, not a catchable OOM) when it needs one huge MTLBuffer.
+# So split the query dimension before the allocation gets that big.
+VAE_ATTENTION_CHUNK_BYTES = 512 * 1024 * 1024
+
+def chunked_sdpa(q, k, v, budget_bytes=VAE_ATTENTION_CHUNK_BYTES):
+    # q, k, v: (B, 1, N, C)
+    n_q = q.shape[2]
+    row_bytes = q.shape[0] * k.shape[2] * q.element_size()
+    chunk = max(1, int(budget_bytes // max(1, row_bytes)))
+    if chunk >= n_q:
+        return comfy.ops.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=0.0, is_causal=False)
+
+    logging.info("VAE attention: chunking {} queries into blocks of {}".format(n_q, chunk))
+    out = torch.empty_like(q)
+    for i in range(0, n_q, chunk):
+        out[:, :, i:i + chunk] = comfy.ops.scaled_dot_product_attention(q[:, :, i:i + chunk], k, v, attn_mask=None, dropout_p=0.0, is_causal=False)
+    return out
+
 def pytorch_attention(q, k, v):
     # compute attention
     orig_shape = q.shape
@@ -315,7 +334,10 @@ def pytorch_attention(q, k, v):
     )
 
     try:
-        out = comfy.ops.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=0.0, is_causal=False)
+        if model_management.is_device_mps(q.device):
+            out = chunked_sdpa(q, k, v)
+        else:
+            out = comfy.ops.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=0.0, is_causal=False)
         out = out.transpose(2, 3).reshape(orig_shape)
     except Exception as e:
         model_management.raise_non_oom(e)

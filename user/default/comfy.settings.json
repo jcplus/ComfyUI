@@ -2,12 +2,13 @@
     "Comfy.InstalledVersion": "1.48.7",
     "Comfy.TutorialCompleted": true,
     "Comfy.RightSidePanel.IsOpen": true,
-    "Comfy.Queue.History.Expanded": true,
+    "Comfy.Queue.History.Expanded": false,
     "Comfy.WorkflowActions.SeenItems": [
         "enter-app-mode",
         "enter-builder-mode"
     ],
     "Comfy.Minimap.Visible": true,
     "Comfy.Graph.CanvasInfo": false,
-    "Comfy.LinkRenderMode": 2
+    "Comfy.LinkRenderMode": 2,
+    "Comfy.Queue.ShowRunProgressBar": false
 }
